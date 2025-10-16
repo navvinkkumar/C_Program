@@ -1,0 +1,142 @@
+
+<div class="">
+  <div style="height:100vh;">
+    <div class="">
+      <div class="shadow w-25 p-4 position-absolute top-50 start-50 translate-middle">
+        <form #studentForm="ngForm" (ngSubmit)="register(studentForm)">
+          <h4 class="display-6 text-center py-2">Student Database</h4>
+
+          <!-- Name -->
+          <div>
+            <label for="name">Name</label>
+            <input id="name" required #name="ngModel" ngModel name="name" type="text" class="form-control" placeholder="Enter student name">
+            <div *ngIf="name.invalid && name.touched">
+              <small class="text-danger">Required</small>
+            </div>
+          </div><br>
+
+          <!-- Roll Number -->
+          <div>
+            <label for="rollNumber">Roll Number</label>
+            <input id="rollNumber" required #rollNumber="ngModel" ngModel name="rollNumber" type="text" class="form-control" placeholder="Enter roll number">
+            <div *ngIf="rollNumber.invalid && rollNumber.touched">
+              <small class="text-danger">Required</small>
+            </div>
+          </div><br>
+
+          <!-- Department -->
+          <div>
+            <label for="department">Department</label>
+            <input id="department" required #department="ngModel" ngModel name="department" type="text" class="form-control" placeholder="Enter department">
+            <div *ngIf="department.invalid && department.touched">
+              <small class="text-danger">Required</small>
+            </div>
+          </div><br>
+
+          <!-- Email -->
+          <div>
+            <label for="email">Email</label>
+            <input id="email" required email #email="ngModel" ngModel name="email" type="email" class="form-control" placeholder="Enter email">
+            <div *ngIf="email.invalid && email.touched">
+              <small class="text-danger" *ngIf="email.errors?.['required']">Required</small>
+              <small class="text-danger" *ngIf="email.errors?.['email']">Invalid email</small>
+            </div>
+          </div><br>
+
+          <!-- Contact -->
+          <div>
+            <label for="contact">Contact Number</label>
+            <input id="contact" required pattern="^[0-9]{10}$" #contact="ngModel" ngModel name="contact" type="text" class="form-control" placeholder="Enter contact number">
+            <div *ngIf="contact.invalid && contact.touched">
+              <small class="text-danger" *ngIf="contact.errors?.['pattern']">Must be 10 digits</small>
+            </div>
+          </div><br>
+
+          <!-- CGPA -->
+          <div>
+            <label for="cgpa">CGPA</label>
+            <input id="cgpa" required min="0" max="10" step="0.1" #cgpa="ngModel" ngModel name="cgpa" type="number" class="form-control" placeholder="Enter CGPA">
+            <div *ngIf="cgpa.invalid && cgpa.touched">
+              <small class="text-danger">Required (0–10)</small>
+            </div>
+          </div><br>
+
+          <!-- Skills -->
+          <div>
+            <label for="skills">Skills</label>
+            <input id="skills" required #skills="ngModel" ngModel name="skills" type="text" class="form-control" placeholder="Enter skills (comma separated)">
+            <div *ngIf="skills.invalid && skills.touched">
+              <small class="text-danger">Required</small>
+            </div>
+          </div><br>
+
+          <div class="text-center">
+            <input class="btn btn-primary" type="submit" value="Submit">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div><br>
+
+  <!-- Table -->
+  <div class="mt-5">
+    <table class="table table-bordered text-center align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Roll Number</th>
+          <th>Department</th>
+          <th>Email</th>
+          <th>Contact</th>
+          <th>CGPA</th>
+          <th>Skills</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of studentDetails">
+          <td>{{student.id}}</td>
+          <td>{{student.name}}</td>
+          <td>{{student.rollNumber}}</td>
+          <td>{{student.department}}</td>
+          <td>{{student.email}}</td>
+          <td>{{student.contact}}</td>
+          <td>{{student.cgpa}}</td>
+          <td>{{student.skills}}</td>
+          <td>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal" (click)="edit(student)">Edit</button>
+          </td>
+          <td>
+            <button class="btn btn-danger" (click)="deleteStudent(student)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Update Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Update Student</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="updateStudent()">
+            <div class="mb-3" *ngFor="let field of ['name','rollNumber','department','email','contact','cgpa','skills']">
+              <label class="form-label text-capitalize">{{ field }}</label>
+              <input [(ngModel)]="studentToUpdate[field]" [name]="field" class="form-control" required />
+            </div>
+            <div class="text-center">
+              <input type="submit" value="Update" class="btn btn-primary">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
